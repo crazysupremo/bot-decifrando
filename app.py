@@ -302,10 +302,14 @@ if __name__ == '__main__':
     print("=" * 60)
     print()
 
-    # Item pedido: virar um "app de verdade" — quando empacotado como .exe
-    # (ou mesmo rodando local), abre o navegador sozinho na interface, sem a
-    # pessoa precisar digitar o endereço na mão.
-    if not IS_RENDER:
+    # Item pedido ("não quero que vá pra uma página da web, quero um app de
+    # desktop de verdade"): quando esse app.py roda COMO BACKEND de dentro do
+    # Electron (ver electron-main.js), quem abre a janela é o próprio
+    # Electron — abrir o navegador aqui também criaria uma aba solta extra,
+    # duplicando a tela. ELECTRON_BACKEND=1 é a variável que o Electron
+    # define ao chamar esse processo, exatamente pra evitar isso.
+    is_electron_backend = os.getenv('ELECTRON_BACKEND') == '1'
+    if not IS_RENDER and not is_electron_backend:
         url_abertura = f"http://{HOST}:{PORT}/"
         threading.Timer(1.2, lambda: webbrowser.open(url_abertura)).start()
 
