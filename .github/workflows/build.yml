@@ -2,6 +2,13 @@ name: Build e publicar instalador (Windows)
 
 # Mesmo esquema do next-game-desktop: builda automático e publica como
 # Release do GitHub sempre que uma tag de versão (ex: v1.0.0) é enviada.
+#
+# Item pedido ("não quero que vá pra página da web, quero um app de
+# desktop de verdade"): o resultado final não é mais só o .exe cru do
+# Flask — esse .exe agora é o BACKEND, escondido dentro de um app Electron
+# (igual o NEXT GAME Desktop). O instalador que sai da Release é o do
+# Electron (NSIS), que instala o app de verdade com ícone, atalho na área
+# de trabalho, e abre numa JANELA PRÓPRIA — nunca um navegador.
 on:
   push:
     tags:
@@ -25,14 +32,31 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Instalar dependências
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Instalar dependências Python
         run: |
           pip install -r requirements.txt
           pip install pyinstaller
 
-      - name: Gerar o instalador (.exe)
+      - name: Gerar o backend (.exe do Flask, escondido dentro do app)
         run: |
-          pyinstaller --onefile --windowed --name "BotDecifrando" --add-data "interface.html;." --add-data ".env.example;." app.py
+          pyinstaller --onefile --name "BotDecifrando" --add-data "interface.html;." --add-data ".env.example;." app.py
+
+      - name: Colocar o backend no lugar que o Electron espera
+        shell: bash
+        run: |
+          mkdir -p backend
+          cp dist/BotDecifrando.exe backend/BotDecifrando.exe
+
+      - name: Instalar dependências do Electron
+        run: npm install
+
+      - name: Gerar o instalador de desktop (Electron + NSIS)
+        run: npx electron-builder --win --publish never
 
       # CORRIGIDO: rodar o workflow manualmente (workflow_dispatch, usado pra
       # testar) falhava com "GitHub Releases requires a tag" — só funcionava
@@ -50,11 +74,13 @@ jobs:
           git push origin "$TAG"
           echo "RELEASE_TAG=$TAG" >> "$GITHUB_ENV"
 
-      - name: Publicar Release com o .exe
+      - name: Publicar Release com o instalador
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ env.RELEASE_TAG || github.ref_name }}
-          files: dist/BotDecifrando.exe
+          # Só o instalador final do Electron (NSIS) — o dist/BotDecifrando.exe
+          # é só o backend interno, não é pra ninguém baixar direto.
+          files: dist-electron/*.exe
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
