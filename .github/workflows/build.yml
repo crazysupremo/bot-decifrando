@@ -1,0 +1,38 @@
+name: Build e publicar instalador (Windows)
+
+# Mesmo esquema do next-game-desktop: builda automático e publica como
+# Release do GitHub sempre que uma tag de versão (ex: v1.0.0) é enviada.
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch: {}
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Baixar código
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Instalar dependências
+        run: |
+          pip install -r requirements.txt
+          pip install pyinstaller
+
+      - name: Gerar o instalador (.exe)
+        run: |
+          pyinstaller --onefile --windowed --name "BotDecifrando" --add-data "interface.html;." --add-data ".env.example;." app.py
+
+      - name: Publicar Release com o .exe
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/BotDecifrando.exe
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
