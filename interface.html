@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎮 Bot Decifrando - Interface Visual</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --secondary: #ec4899;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --dark: #1f2937;
+            --light: #f3f4f6;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            animation: slideDown 0.5s ease;
+        }
+
+        header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            animation: slideUp 0.5s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.3);
+        }
+
+        .card h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-input {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        input, select {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid var(--light);
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            background: var(--primary);
+            color: white;
+        }
+
+        button:hover {
+            background: #4f46e5;
+            transform: scale(1.05);
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .result {
+            background: var(--light);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+            color: var(--dark);
+            animation: popIn 0.3s ease;
+        }
+
+        .result.success {
+            background: #d1fae5;
+            border-left: 4px solid var(--success);
+        }
+
+        .result.error {
+            background: #fee2e2;
+            border-left: 4px solid var(--danger);
+        }
+
+        .result.info {
+            background: #dbeafe;
+            border-left: 4px solid #3b82f6;
+        }
+
+        .idioma-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .idioma-selector label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        .idioma-selector input[type="radio"] {
+            cursor: pointer;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat {
+            background: var(--light);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            color: #6b7280;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        .examples {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            animation: slideUp 0.5s ease 0.1s both;
+        }
+
+        .examples h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .example-item {
+            background: var(--light);
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 6px;
+            border-left: 4px solid var(--secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .example-item:hover {
+            background: #e5e7eb;
+            transform: translateX(5px);
+        }
+
+        .footer {
+            text-align: center;
+            color: white;
+            margin-top: 40px;
+            opacity: 0.8;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes popIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 15px;
+            background: var(--light);
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+        }
+
+        .status.online {
+            background: #d1fae5;
+            color: var(--success);
+        }
+
+        .status.offline {
+            background: #fee2e2;
+            color: var(--danger);
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .status.online .status-dot {
+            background: var(--success);
+        }
+
+        .status.offline .status-dot {
+            background: var(--danger);
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2em;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            .card-input {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎮 Bot Decifrando</h1>
+            <p>Desembaralhe palavras e resolva matemática em tempo real</p>
+        </header>
+
+        <div class="cards">
+            <!-- CARD 1: Desembaralhar Palavras -->
+            <div class="card">
+                <h2>🔤 Desembaralhar Palavras</h2>
+
+                <div id="status-desembaralha" class="status offline">
+                    <span class="status-dot"></span>
+                    <span>Conectando...</span>
+                </div>
+
+                <div class="idioma-selector">
+                    <label>
+                        <input type="radio" name="idioma-desembaralha" value="pt" checked>
+                        🇧🇷 Português
+                    </label>
+                    <label>
+                        <input type="radio" name="idioma-desembaralha" value="es">
+                        🇪🇸 Espanhol
+                    </label>
+                </div>
+
+                <div class="card-input">
+                    <input type="text" id="palavra-input" placeholder="Ex: OTEPMOC" maxlength="50">
+                    <button onclick="desembaralhar()">Desembaralhar</button>
+                </div>
+
+                <div id="resultado-desembaralha"></div>
+
+                <div style="margin-top: 20px;">
+                    <strong>Exemplos rápidos:</strong>
+                    <div class="example-item" onclick="testeRapido('desembaralha', 'OTEPMOC')">
+                        OTEPMOC → ?
+                    </div>
+                    <div class="example-item" onclick="testeRapido('desembaralha', 'AMARGORP')">
+                        AMARGORP → ?
+                    </div>
+                    <div class="example-item" onclick="testeRapido('desembaralha', 'ERUTURCAETXUS')">
+                        ERUTURCAETXUS → ?
+                    </div>
+                </div>
+            </div>
+
+            <!-- CARD 2: Resolver Matemática -->
+            <div class="card">
+                <h2>🧮 Resolver Matemática</h2>
+
+                <div id="status-math" class="status offline">
+                    <span class="status-dot"></span>
+                    <span>Conectando...</span>
+                </div>
+
+                <div class="card-input">
+                    <input type="text" id="math-input" placeholder="Ex: 2+2, (10*5)+20">
+                    <button onclick="resolverMath()">Calcular</button>
+                </div>
+
+                <div id="resultado-math"></div>
+
+                <div style="margin-top: 20px;">
+                    <strong>Exemplos rápidos:</strong>
+                    <div class="example-item" onclick="testeRapido('math', '2+2')">
+                        2+2 = ?
+                    </div>
+                    <div class="example-item" onclick="testeRapido('math', '(10*5)+20')">
+                        (10*5)+20 = ?
+                    </div>
+                    <div class="example-item" onclick="testeRapido('math', '100/4')">
+                        100/4 = ?
+                    </div>
+                    <div class="example-item" onclick="testeRapido('math', '2**10')">
+                        2**10 = ?
+                    </div>
+                </div>
+            </div>
+
+            <!-- CARD 3: Modo Automático -->
+            <div class="card">
+                <h2>🤖 Modo Automático</h2>
+
+                <div id="status-auto" class="status offline">
+                    <span class="status-dot"></span>
+                    <span>Conectando...</span>
+                </div>
+
+                <div class="idioma-selector">
+                    <label>
+                        <input type="radio" name="idioma-auto" value="pt" checked>
+                        🇧🇷 Português
+                    </label>
+                    <label>
+                        <input type="radio" name="idioma-auto" value="es">
+                        🇪🇸 Espanhol
+                    </label>
+                </div>
+
+                <div class="card-input">
+                    <input type="text" id="auto-input" placeholder="Digite qualquer coisa...">
+                    <button onclick="modoAuto()">Processar</button>
+                </div>
+
+                <div id="resultado-auto"></div>
+
+                <div style="margin-top: 20px;">
+                    <strong>O bot detecta automaticamente!</strong>
+                    <div style="font-size: 0.9em; color: #6b7280; margin-top: 10px;">
+                        ✨ Digite uma palavra embaralhada ou expressão matemática que o bot identifica automaticamente
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ESTATÍSTICAS -->
+        <div class="examples">
+            <h2>📊 Estatísticas</h2>
+            <div class="stats" id="stats">
+                <div class="stat">
+                    <div class="stat-number" id="total-stats">0</div>
+                    <div class="stat-label">Total de Requisições</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number" id="palavras-stats">0</div>
+                    <div class="stat-label">Palavras Desembaraçadas</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number" id="math-stats">0</div>
+                    <div class="stat-label">Expressões Resolvidas</div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>💡 Execute a API com: <code>python bot_api_webhook.py</code></p>
+            <p style="margin-top: 10px; font-size: 0.9em;">🔗 API rodando em http://localhost:5000</p>
+        </footer>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:5000';
+
+        // Verificar status da API periodicamente
+        function verificarStatus() {
+            fetch(`${API_URL}/health`)
+                .then(r => {
+                    document.querySelectorAll('[id^="status-"]').forEach(el => {
+                        el.classList.remove('offline');
+                        el.classList.add('online');
+                        el.innerHTML = '<span class="status-dot"></span><span>🟢 API conectada</span>';
+                    });
+                    atualizarEstatisticas();
+                })
+                .catch(() => {
+                    document.querySelectorAll('[id^="status-"]').forEach(el => {
+                        el.classList.remove('online');
+                        el.classList.add('offline');
+                        el.innerHTML = '<span class="status-dot"></span><span>🔴 API desconectada</span>';
+                    });
+                });
+        }
+
+        // Desembaralhar Palavra
+        async function desembaralhar() {
+            const palavra = document.getElementById('palavra-input').value.trim();
+            const idioma = document.querySelector('input[name="idioma-desembaralha"]:checked').value;
+            const resultado = document.getElementById('resultado-desembaralha');
+
+            if (!palavra) {
+                mostrarResultado(resultado, 'Digite uma palavra!', 'error');
+                return;
+            }
+
+            mostrarResultado(resultado, '<div class="loading"></div> Processando...', 'info');
+
+            try {
+                const response = await fetch(`${API_URL}/desembaralha`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ palavra, idioma })
+                });
+
+                const data = await response.json();
+                const soluções = data.soluções || [];
+
+                if (soluções.length > 0) {
+                    const texto = `✅ <strong>${soluções[0]}</strong>${soluções.length > 1 ? ` (${soluções.length} opções encontradas)` : ''}`;
+                    mostrarResultado(resultado, texto, 'success');
+                } else {
+                    mostrarResultado(resultado, '❌ Nenhuma palavra encontrada', 'error');
+                }
+
+                atualizarEstatisticas();
+            } catch (e) {
+                mostrarResultado(resultado, '❌ Erro ao conectar com a API', 'error');
+            }
+        }
+
+        // Resolver Matemática
+        async function resolverMath() {
+            const expressao = document.getElementById('math-input').value.trim();
+            const resultado = document.getElementById('resultado-math');
+
+            if (!expressao) {
+                mostrarResultado(resultado, 'Digite uma expressão!', 'error');
+                return;
+            }
+
+            mostrarResultado(resultado, '<div class="loading"></div> Calculando...', 'info');
+
+            try {
+                const response = await fetch(`${API_URL}/math`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ expressao })
+                });
+
+                const data = await response.json();
+                const res = data.resultado;
+
+                if (!res.includes('❌')) {
+                    mostrarResultado(resultado, `✅ <strong>${res}</strong>`, 'success');
+                } else {
+                    mostrarResultado(resultado, res, 'error');
+                }
+
+                atualizarEstatisticas();
+            } catch (e) {
+                mostrarResultado(resultado, '❌ Erro ao conectar com a API', 'error');
+            }
+        }
+
+        // Modo Automático
+        async function modoAuto() {
+            const texto = document.getElementById('auto-input').value.trim();
+            const idioma = document.querySelector('input[name="idioma-auto"]:checked').value;
+            const resultado = document.getElementById('resultado-auto');
+
+            if (!texto) {
+                mostrarResultado(resultado, 'Digite algo!', 'error');
+                return;
+            }
+
+            mostrarResultado(resultado, '<div class="loading"></div> Processando...', 'info');
+
+            try {
+                const response = await fetch(`${API_URL}/auto`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ texto, idioma })
+                });
+
+                const data = await response.json();
+                const tipo = data.tipo;
+                const res = data.resultado;
+
+                let emoji = '❓';
+                if (tipo === 'palavra_embaralhada') emoji = '🔤';
+                if (tipo === 'matematica') emoji = '🧮';
+
+                mostrarResultado(resultado, `${emoji} <strong>${res}</strong>`, 'success');
+                atualizarEstatisticas();
+            } catch (e) {
+                mostrarResultado(resultado, '❌ Erro ao conectar com a API', 'error');
+            }
+        }
+
+        // Teste Rápido
+        function testeRapido(tipo, valor) {
+            if (tipo === 'desembaralha') {
+                document.getElementById('palavra-input').value = valor;
+                desembaralhar();
+            } else {
+                document.getElementById('math-input').value = valor;
+                resolverMath();
+            }
+        }
+
+        // Mostrar Resultado
+        function mostrarResultado(elemento, texto, classe) {
+            elemento.innerHTML = `<div class="result ${classe}">${texto}</div>`;
+        }
+
+        // Atualizar Estatísticas
+        async function atualizarEstatisticas() {
+            try {
+                const response = await fetch(`${API_URL}/stats`);
+                const data = await response.json();
+
+                document.getElementById('total-stats').textContent = data.total_requisicoes || 0;
+                document.getElementById('palavras-stats').textContent = data.palavras_desembaraçadas || 0;
+                document.getElementById('math-stats').textContent = data.expressoes_matematicas || 0;
+            } catch (e) {
+                // Falha silenciosa
+            }
+        }
+
+        // Enter para submeter
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('palavra-input').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') desembaralhar();
+            });
+            document.getElementById('math-input').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') resolverMath();
+            });
+            document.getElementById('auto-input').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') modoAuto();
+            });
+
+            verificarStatus();
+            setInterval(verificarStatus, 5000);
+        });
+    </script>
+</body>
+</html>

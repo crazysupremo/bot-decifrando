@@ -1,0 +1,100 @@
+================================================================================
+                    🎮 BOT DECIFRANDO - INÍCIO RÁPIDO
+================================================================================
+
+✨ O QUE É?
+Um bot que desembaralha palavras e resolve matemática em português e espanhol.
+Funciona no PC, celular, Discord e na nuvem (Render)!
+
+================================================================================
+🚀 COMEÇAR EM 3 PASSOS
+================================================================================
+
+PASSO 1: INSTALAR
+   Windows:  Clique 2x em "install.bat"
+   Mac/Linux: Execute "bash install.sh"
+
+PASSO 2: INICIAR
+   Windows:  Abra "start_windows.bat"
+   Mac/Linux: Execute "bash start_linux.sh"
+
+   Ou manualmente:
+   $ python app.py
+
+PASSO 3: ABRIR NO NAVEGADOR
+   Acesse: http://localhost:5000
+
+   Você verá uma interface visual bonita onde pode:
+   - Desembaralhar palavras: OTEPMOC → COMPUTADOR ✅
+   - Resolver matemática: 2+2 → 4 ✅
+   - Testar em português e espanhol
+
+================================================================================
+📱 USAR NO CELULAR/OUTRO PC
+================================================================================
+
+A. LOCALMENTE (mesmo WiFi):
+   1. Descubra o IP do seu PC: ipconfig (Windows) ou ifconfig (Linux/Mac)
+   2. No celular, acesse: http://SEU_IP:5000
+
+B. NA NUVEM (funciona de qualquer lugar):
+   1. Leia o arquivo: DEPLOY_RENDER.md
+   2. Faça push no GitHub
+   3. Deploy no Render (grátis!)
+   4. Acesse: https://seu-projeto.onrender.com
+
+================================================================================
+📚 DOCUMENTOS IMPORTANTES
+================================================================================
+
+📖 Leia nesta ordem:
+   1. COMECE_AQUI.md     ← Guia rápido
+   2. README.md          ← Documentação completa
+   3. DEPLOY_RENDER.md   ← Como colocar na nuvem
+   4. GITHUB.md          ← Como usar no Git
+
+================================================================================
+⚙️ OPÇÕES AVANÇADAS
+================================================================================
+
+Bot Discord:
+   python bot_discord.py
+
+Testes/Exemplos:
+   python cliente_teste.py
+
+API (sem interface):
+   python bot_api_webhook.py
+
+================================================================================
+❓ DÚVIDAS?
+================================================================================
+
+❌ "Preciso de Python"
+   → Baixe em: https://www.python.org/downloads/
+
+❌ "Port 5000 já está em uso"
+   → Edite app.py linha PORT = int(os.getenv('PORT', 5000))
+
+❌ "Não consegui instalar dependências"
+   → Tente: pip install --upgrade pip
+   → Depois: pip install -r requirements.txt
+
+❌ "Interface não conecta"
+   → Verifique se "python app.py" está rodando
+   → Verifique se http://localhost:5000 carrega
+
+================================================================================
+🎯 PRÓXIMOS PASSOS
+================================================================================
+
+1. Execute install.bat ou install.sh
+2. Execute python app.py
+3. Abra http://localhost:5000 no navegador
+4. Teste as funcionalidades
+5. Leia COMECE_AQUI.md para mais detalhes
+6. Quer colocar na nuvem? Leia DEPLOY_RENDER.md
+
+================================================================================
+🎉 PRONTO! Seu bot está instalado e pronto para usar!
+================================================================================
