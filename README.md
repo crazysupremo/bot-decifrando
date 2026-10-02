@@ -22,11 +22,14 @@ e só responde quando alguém digita um comando (`/desembaralha`, `/math`,
 `/auto`). Com o Groq configurado:
 
 1. Crie uma conta grátis em [console.groq.com](https://console.groq.com/keys) e gere uma chave de API.
-2. Abra o arquivo `.env` (crie uma cópia de `.env.example` se ainda não tiver) e preencha:
+2. Crie um arquivo chamado `.env` (sem nome antes do ponto) com o conteúdo:
    ```
    GROQ_API_KEY=sua_chave_aqui
    ```
-3. Reinicie o bot. Pronto — agora ele desembaralha qualquer palavra e, no Discord, responde sozinho quando perceber uma mensagem de quiz no chat (sem precisar de `/comando`).
+3. Onde colocar esse arquivo `.env`:
+   - **Rodando com Python direto** (`python app.py`): na mesma pasta do `app.py`.
+   - **App de desktop instalado** (o instalador `.exe`): na MESMA PASTA onde o "Bot Decifrando.exe" foi instalado — geralmente `%LOCALAPPDATA%\Programs\bot-decifrando-desktop\`. O jeito mais fácil de achar essa pasta: clica com o botão direito no atalho da área de trabalho → "Abrir local do arquivo".
+4. Reinicie o bot (feche e abra de novo). Pronto — agora ele desembaralha qualquer palavra e, no Discord, responde sozinho quando perceber uma mensagem de quiz no chat (sem precisar de `/comando`).
 
 ---
 

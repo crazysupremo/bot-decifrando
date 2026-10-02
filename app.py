@@ -30,6 +30,26 @@ import json
 IS_FROZEN = getattr(sys, 'frozen', False)
 BASE_DIR = Path(sys._MEIPASS) if IS_FROZEN else Path(__file__).parent
 
+# CORRIGIDO (bug real — "o Groq não funciona pra calcular/decifrar"): esse
+# arquivo nunca chamava load_dotenv() em lugar nenhum! A variável
+# GROQ_API_KEY do .env nunca era lida de verdade pro processo — por isso
+# groq_configurado() sempre voltava False e o fallback do Groq nunca rodava,
+# mesmo com a chave preenchida certinho no arquivo. Só o bot_discord.py
+# chamava load_dotenv(), e o app.py (usado pelo .exe/app de desktop) não.
+#
+# Também precisa procurar o .env no lugar certo: quando empacotado em .exe,
+# sys._MEIPASS é uma pasta TEMPORÁRIA que o PyInstaller apaga ao fechar —
+# colocar o .env lá dentro não funcionaria. O lugar certo é do lado do
+# próprio .exe (sys.executable), onde a pessoa realmente consegue editar o
+# arquivo depois de instalado.
+from dotenv import load_dotenv
+
+if IS_FROZEN:
+    env_path = Path(sys.executable).parent / '.env'
+else:
+    env_path = Path(__file__).parent / '.env'
+load_dotenv(dotenv_path=env_path)
+
 app = Flask(__name__, static_folder=None)
 CORS(app)
 
