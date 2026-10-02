@@ -8,6 +8,11 @@ on:
       - 'v*'
   workflow_dispatch: {}
 
+# Necessário pra criar tag + publicar Release (sem isso, o GITHUB_TOKEN
+# padrão só tem permissão de leitura em alguns repositórios).
+permissions:
+  contents: write
+
 jobs:
   build-windows:
     runs-on: windows-latest
@@ -29,9 +34,26 @@ jobs:
         run: |
           pyinstaller --onefile --windowed --name "BotDecifrando" --add-data "interface.html;." --add-data ".env.example;." app.py
 
+      # CORRIGIDO: rodar o workflow manualmente (workflow_dispatch, usado pra
+      # testar) falhava com "GitHub Releases requires a tag" — só funcionava
+      # quando disparado por uma tag de verdade (ex: v1.0.0). Agora, se não
+      # veio de uma tag, cria uma tag automática na hora (ex: manual-173...)
+      # só pra essa Release ter um lugar pra existir.
+      - name: Definir tag da release (quando disparado manualmente)
+        if: github.event_name == 'workflow_dispatch'
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          TAG="manual-$(date +%Y%m%d%H%M%S)"
+          git tag "$TAG"
+          git push origin "$TAG"
+          echo "RELEASE_TAG=$TAG" >> "$GITHUB_ENV"
+
       - name: Publicar Release com o .exe
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ env.RELEASE_TAG || github.ref_name }}
           files: dist/BotDecifrando.exe
           generate_release_notes: true
         env:
